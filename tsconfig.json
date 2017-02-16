@@ -1,7 +1,13 @@
 {
   "compilerOptions": {
+    "baseUrl": "src",
     "declaration": true,
     "module": "commonjs",
+    "noImplicitAny": true,
+    "noImplicitReturns": true,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
     "outDir": "lib",
     "target": "ES5"
   }
