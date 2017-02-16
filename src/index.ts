@@ -104,7 +104,6 @@ class OpenSimplexNoise {
       source[r[0]] = source[i]
     }
   }
-
   noise2D (x: number, y: number): number {
     const stretchOffset = (x + y) * STRETCH_2D
     const [xs, ys] = [x + stretchOffset, y + stretchOffset]
@@ -144,7 +143,7 @@ class OpenSimplexNoise {
     const [dx0, dy0, dz0] = [x - (xsb + squishOffset), y - (ysb + squishOffset), z - (zsb + squishOffset)]
     const [xins, yins, zins] = [xs - xsb, ys - ysb, zs - zsb]
     const inSum = xins + yins + zins
-    const hashVals = Uint32Array(7)
+    const hashVals = new Uint32Array(7)
     hashVals[0] = yins - zins + 1
     hashVals[1] = xins - yins + 1
     hashVals[2] = xins - zins + 1
@@ -154,14 +153,14 @@ class OpenSimplexNoise {
     hashVals[6] = inSum + xins
     const hash = hashVals[0] | hashVals[1] << 1 | hashVals[2] << 2 | hashVals[3] << 3 | hashVals[4] << 5 |
       hashVals[5] << 7 | hashVals[6] << 9
-    const c = this.lookup3D[hash]
-    const value = 0.0
+    let c = this.lookup3D[hash]
+    let value = 0.0
     while (typeof c !== 'undefined') {
       const [dx, dy, dz] = [dx0 + c.dx, dy0 + c.dy, dz0 + c.dz]
-      var attn = 2 - dx * dx - dy * dy - dz * dz
+      let attn = 2 - dx * dx - dy * dy - dz * dz
       if (attn > 0) {
         const [px, py, pz] = [xsb + c.xsb, ysb + c.ysb, zsb + c.zsb]
-        const i = this.perm3D[(perm[(perm[px & 0xFF] + py) & 0xFF] + pz) & 0xFF]
+        const i = this.perm3D[(this.perm[(this.perm[px & 0xFF] + py) & 0xFF] + pz) & 0xFF]
         const valuePart = gradients3D[i] * dx + gradients3D[i + 1] * dy + gradients3D[i + 2] * dz
         attn *= attn
         value += attn * attn * valuePart
@@ -169,6 +168,50 @@ class OpenSimplexNoise {
       c = c.next
     }
     return value * NORM_3D
+  }
+
+  noise4D (x: number, y: number, z: number, w: number): number {
+    const stretchOffset = (x + y + z + w) * STRETCH_4D
+    const [xs, ys, zs, ws] = [x + stretchOffset, y + stretchOffset, z + stretchOffset, w + stretchOffset]
+    const [xsb, ysb, zsb, wsb] = [Math.floor(xs), Math.floor(ys), Math.floor(zs), Math.floor(ws)]
+    const squishOffset = (xsb + ysb + zsb + wsb) * SQUISH_4D
+    const dx0 = x - (xsb + squishOffset)
+    const dy0 = y - (ysb + squishOffset)
+    const dz0 = z - (zsb + squishOffset)
+    const dw0 = w - (wsb + squishOffset)
+    const [xins, yins, zins, wins] = [xs - xsb, ys - ysb, zs - zsb, ws - wsb]
+    const inSum = xins + yins + zins + wins
+    const hashVals = new Uint32Array(11)
+    hashVals[0] = zins - wins + 1
+    hashVals[1] = yins - zins + 1
+    hashVals[2] = yins - wins + 1
+    hashVals[3] = xins - yins + 1
+    hashVals[4] = xins - zins + 1
+    hashVals[5] = xins - wins + 1
+    hashVals[6] = inSum << 6
+    hashVals[7] = inSum + wins
+    hashVals[8] = inSum + zins
+    hashVals[9] = inSum + yins
+    hashVals[10] = inSum + xins
+    const hash =
+      hashVals[0] | hashVals[1] << 1 | hashVals[2] << 2 | hashVals[3] << 3 | hashVals[4] << 4 | hashVals[5] << 5 |
+      hashVals[6] << 6 | hashVals[7] << 8 | hashVals[8] << 11 | hashVals[9] << 14 | hashVals[10] << 17
+    let c = this.lookup4D[hash]
+    let value = 0.0
+    while (typeof c !== 'undefined') {
+      const [dx, dy, dz, dw] = [dx0 + c.dx, dy0 + c.dy, dz0 + c.dz, dw0 + c.dw]
+      let attn = 2 - dx * dx - dy * dy - dz * dz - dw * dw;
+      if (attn > 0) {
+        const [px, py, pz, pw] = [xsb + c.xsb, ysb + c.ysb, zsb + c.zsb, wsb + c.wsb]
+        const i = this.perm4D[(this.perm[(this.perm[(this.perm[px & 0xFF] + py) & 0xFF] + pz) & 0xFF] + pw) & 0xFF];
+        const valuePart =
+          gradients4D[i] * dx + gradients4D[i + 1] * dy + gradients4D[i + 2] * dz + gradients4D[i + 3] * dw;
+        attn *= attn;
+        value += attn * attn * valuePart;
+      }
+      c = c.next;
+    }
+    return value * NORM_4D
   }
 
   private initialize() {
