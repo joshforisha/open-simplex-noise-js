@@ -14,7 +14,7 @@ TypeScript/JavaScript implementation of [OpenSimplex noise](https://en.wikipedia
 ```javascript
 import OpenSimplexNoise from 'open-simplex-noise'
 
-const [width, height] = [888, 444]
+const [width, height] = [888, 222]
 const canvas = document.querySelector('canvas')
 const ctx = canvas.getContext('2d')
 const imageData = ctx.createImageData(width, height)
@@ -34,3 +34,15 @@ ctx.putImageData(imageData, 0, 0)
 ```
 
 ![Example output](https://github.com/joshforisha/open-simplex-noise-js/blob/master/images/example.png?raw=true)
+
+## API
+
+### `class OpenSimplexNoise`
+
+#### `constructor (seed: number)`
+
+#### `noise2D (x: number, y: number) => number`
+
+#### `noise3D (x: number, y: number, z: number) => number`
+
+#### `noise4D (x: number, y: number, z: number, w: number) => number`
