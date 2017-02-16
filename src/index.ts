@@ -200,16 +200,16 @@ class OpenSimplexNoise {
     let value = 0.0
     while (typeof c !== 'undefined') {
       const [dx, dy, dz, dw] = [dx0 + c.dx, dy0 + c.dy, dz0 + c.dz, dw0 + c.dw]
-      let attn = 2 - dx * dx - dy * dy - dz * dz - dw * dw;
+      let attn = 2 - dx * dx - dy * dy - dz * dz - dw * dw
       if (attn > 0) {
         const [px, py, pz, pw] = [xsb + c.xsb, ysb + c.ysb, zsb + c.zsb, wsb + c.wsb]
-        const i = this.perm4D[(this.perm[(this.perm[(this.perm[px & 0xFF] + py) & 0xFF] + pz) & 0xFF] + pw) & 0xFF];
+        const i = this.perm4D[(this.perm[(this.perm[(this.perm[px & 0xFF] + py) & 0xFF] + pz) & 0xFF] + pw) & 0xFF]
         const valuePart =
-          gradients4D[i] * dx + gradients4D[i + 1] * dy + gradients4D[i + 2] * dz + gradients4D[i + 3] * dw;
-        attn *= attn;
-        value += attn * attn * valuePart;
+          gradients4D[i] * dx + gradients4D[i + 1] * dy + gradients4D[i + 2] * dz + gradients4D[i + 3] * dw
+        attn *= attn
+        value += attn * attn * valuePart
       }
-      c = c.next;
+      c = c.next
     }
     return value * NORM_4D
   }
