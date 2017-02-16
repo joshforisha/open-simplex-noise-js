@@ -1,5 +1,7 @@
 # Change Log
 
+This library uses [Compatible Versioning](https://github.com/staltz/comver#readme).
+
 ## [Unreleased]
 
 ## [v1.0]
