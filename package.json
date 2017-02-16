@@ -1,6 +1,6 @@
 {
   "name": "open-simplex-noise",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "OpenSimplex noise for TypeScript/JavaScript",
   "keywords": ["noise", "open-simplex-noise", "procedural-generation", "simplex-noise"],
   "homepage": "https://github.com/joshforisha/open-simplex-noise-js#readme",
