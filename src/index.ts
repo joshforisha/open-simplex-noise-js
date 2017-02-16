@@ -1,7 +1,7 @@
 import {
   NORM_2D, NORM_3D, NORM_4D,
-  STRETCH_2D, STRETCH_3D, STRETCH_4D,
   SQUISH_2D, SQUISH_3D, SQUISH_4D,
+  STRETCH_2D, STRETCH_3D, STRETCH_4D,
   base2D, base3D, base4D,
   gradients2D, gradients3D, gradients4D,
   lookupPairs2D, lookupPairs3D, lookupPairs4D,
@@ -107,15 +107,11 @@ class OpenSimplexNoise {
 
   noise2D (x: number, y: number): number {
     const stretchOffset = (x + y) * STRETCH_2D
-    const xs = x + stretchOffset
-    const ys = y + stretchOffset
-    const xsb = Math.floor(xs)
-    const ysb = Math.floor(ys)
+    const [xs, ys] = [x + stretchOffset, y + stretchOffset]
+    const [xsb, ysb] = [Math.floor(xs), Math.floor(ys)]
     const squishOffset = (xsb + ysb) * SQUISH_2D
-    const dx0 = x - (xsb + squishOffset)
-    const dy0 = y - (ysb + squishOffset)
-    const xins = xs - xsb
-    const yins = ys - ysb
+    const [dx0, dy0] = [x - (xsb + squishOffset), y - (ysb + squishOffset)]
+    const [xins, yins] = [xs - xsb, ys - ysb]
     const inSum = xins + yins
     const hashVals = new Uint32Array(4)
     hashVals[0] = xins - yins + 1
@@ -126,12 +122,10 @@ class OpenSimplexNoise {
     let c = this.lookup2D[hash]
     let value = 0.0
     while (typeof c !== 'undefined') {
-      const dx = dx0 + c.dx
-      const dy = dy0 + c.dy
+      const [dx, dy] = [dx0 + c.dx, dy0 + c.dy]
       let attn = 2 - dx * dx - dy * dy
       if (attn > 0) {
-        const px = xsb + c.xsb
-        const py = ysb + c.ysb
+        const [px, py] = [xsb + c.xsb, ysb + c.ysb]
         const i = this.perm2D[(this.perm[px & 0xFF] + py) & 0xFF]
         const valuePart = gradients2D[i] * dx + gradients2D[i + 1] * dy
         attn *= attn
@@ -140,6 +134,41 @@ class OpenSimplexNoise {
       c = c.next
     }
     return value * NORM_2D
+  }
+
+  noise3D (x: number, y: number, z: number): number {
+    const stretchOffset = (x + y + z) * STRETCH_3D
+    const [xs, ys, zs] = [x + stretchOffset, y + stretchOffset, z + stretchOffset]
+    const [xsb, ysb, zsb] = [Math.floor(xs), Math.floor(ys), Math.floor(zs)]
+    const squishOffset = (xsb + ysb + zsb) * SQUISH_3D
+    const [dx0, dy0, dz0] = [x - (xsb + squishOffset), y - (ysb + squishOffset), z - (zsb + squishOffset)]
+    const [xins, yins, zins] = [xs - xsb, ys - ysb, zs - zsb]
+    const inSum = xins + yins + zins
+    const hashVals = Uint32Array(7)
+    hashVals[0] = yins - zins + 1
+    hashVals[1] = xins - yins + 1
+    hashVals[2] = xins - zins + 1
+    hashVals[3] = inSum
+    hashVals[4] = inSum + zins
+    hashVals[5] = inSum + yins
+    hashVals[6] = inSum + xins
+    const hash = hashVals[0] | hashVals[1] << 1 | hashVals[2] << 2 | hashVals[3] << 3 | hashVals[4] << 5 |
+      hashVals[5] << 7 | hashVals[6] << 9
+    const c = this.lookup3D[hash]
+    const value = 0.0
+    while (typeof c !== 'undefined') {
+      const [dx, dy, dz] = [dx0 + c.dx, dy0 + c.dy, dz0 + c.dz]
+      var attn = 2 - dx * dx - dy * dy - dz * dz
+      if (attn > 0) {
+        const [px, py, pz] = [xsb + c.xsb, ysb + c.ysb, zsb + c.zsb]
+        const i = this.perm3D[(perm[(perm[px & 0xFF] + py) & 0xFF] + pz) & 0xFF]
+        const valuePart = gradients3D[i] * dx + gradients3D[i + 1] * dy + gradients3D[i + 2] * dz
+        attn *= attn
+        value += attn * attn * valuePart
+      }
+      c = c.next
+    }
+    return value * NORM_3D
   }
 
   private initialize() {
