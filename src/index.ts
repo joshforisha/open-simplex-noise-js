@@ -33,9 +33,9 @@ class Contribution3 {
   zsb: number
 
   constructor (multiplier: number, xsb: number, ysb: number, zsb: number) {
-    this.dx = -xsb - multiplier * SQUISH_2D
-    this.dy = -ysb - multiplier * SQUISH_2D
-    this.dz = -zsb - multiplier * SQUISH_2D
+    this.dx = -xsb - multiplier * SQUISH_3D
+    this.dy = -ysb - multiplier * SQUISH_3D
+    this.dz = -zsb - multiplier * SQUISH_3D
     this.xsb = xsb
     this.ysb = ysb
     this.zsb = zsb
@@ -54,10 +54,10 @@ class Contribution4 {
   zsb: number
 
   constructor (multiplier: number, xsb: number, ysb: number, zsb: number, wsb: number) {
-    this.dx = -xsb - multiplier * SQUISH_2D
-    this.dy = -ysb - multiplier * SQUISH_2D
-    this.dz = -zsb - multiplier * SQUISH_2D
-    this.dw = -wsb - multiplier * SQUISH_2D
+    this.dx = -xsb - multiplier * SQUISH_4D
+    this.dy = -ysb - multiplier * SQUISH_4D
+    this.dz = -zsb - multiplier * SQUISH_4D
+    this.dw = -wsb - multiplier * SQUISH_4D
     this.xsb = xsb
     this.ysb = ysb
     this.zsb = zsb
@@ -104,6 +104,7 @@ class OpenSimplexNoise {
       source[r[0]] = source[i]
     }
   }
+
   noise2D (x: number, y: number): number {
     const stretchOffset = (x + y) * STRETCH_2D
     const [xs, ys] = [x + stretchOffset, y + stretchOffset]
@@ -232,6 +233,7 @@ class OpenSimplexNoise {
     for (let i = 0; i < lookupPairs2D.length; i += 2) {
       this.lookup2D[lookupPairs2D[i]] = contributions2D[lookupPairs2D[i + 1]]
     }
+
     const contributions3D: Contribution3[] = []
     for (let i = 0; i < p3D.length; i += 9) {
       const baseSet = base3D[p3D[i]]
@@ -250,6 +252,7 @@ class OpenSimplexNoise {
     for (let i = 0; i < lookupPairs3D.length; i += 2) {
       this.lookup3D[lookupPairs3D[i]] = contributions3D[lookupPairs3D[i + 1]]
     }
+
     const contributions4D: Contribution4[] = []
     for (let i = 0; i < p4D.length; i += 16) {
       const baseSet = base4D[p4D[i]]
