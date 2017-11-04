@@ -20,7 +20,7 @@ import {
   p2D,
   p3D,
   p4D
-} from "./constants";
+} from './constants';
 
 class Contribution2 {
   dx: number;
@@ -144,7 +144,7 @@ export default class OpenSimplexNoise {
       (hashVals[3] << 4);
     let c = this.lookup2D[hash];
     let value = 0.0;
-    while (typeof c !== "undefined") {
+    while (typeof c !== 'undefined') {
       const [dx, dy] = [dx0 + c.dx, dy0 + c.dy];
       let attn = 2 - dx * dx - dy * dy;
       if (attn > 0) {
@@ -193,7 +193,7 @@ export default class OpenSimplexNoise {
       (hashVals[6] << 9);
     let c = this.lookup3D[hash];
     let value = 0.0;
-    while (typeof c !== "undefined") {
+    while (typeof c !== 'undefined') {
       const [dx, dy, dz] = [dx0 + c.dx, dy0 + c.dy, dz0 + c.dz];
       let attn = 2 - dx * dx - dy * dy - dz * dz;
       if (attn > 0) {
@@ -260,7 +260,7 @@ export default class OpenSimplexNoise {
       (hashVals[10] << 17);
     let c = this.lookup4D[hash];
     let value = 0.0;
-    while (typeof c !== "undefined") {
+    while (typeof c !== 'undefined') {
       const [dx, dy, dz, dw] = [dx0 + c.dx, dy0 + c.dy, dz0 + c.dz, dw0 + c.dw];
       let attn = 2 - dx * dx - dy * dy - dz * dz - dw * dw;
       if (attn > 0) {

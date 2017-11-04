@@ -22,7 +22,7 @@
   "types": "lib/index.d.ts",
   "scripts": {
     "compile": "tsc",
-    "format": "prettier --parser typescript --write src/*.ts",
+    "format": "prettier --parser typescript --single-quote --write src/*.ts",
     "watch": "tsc --watch"
   },
   "devDependencies": {
