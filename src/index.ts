@@ -124,6 +124,53 @@ export default class OpenSimplexNoise {
     }
   }
 
+  array2D(width: number, height: number): number[][] {
+    const output = new Array(width);
+    for (let x = 0; x < width; x++) {
+      output[x] = new Array(height);
+      for (let y = 0; y < height; y++) {
+        output[x][y] = this.noise2D(x, y);
+      }
+    }
+    return output;
+  }
+
+  array3D(width: number, height: number, depth: number): number[][][] {
+    const output = new Array(width);
+    for (let x = 0; x < width; x++) {
+      output[x] = new Array(height);
+      for (let y = 0; y < height; y++) {
+        output[x][y] = new Array(depth);
+        for (let z = 0; z < depth; z++) {
+          output[x][y][z] = this.noise3D(x, y, z);
+        }
+      }
+    }
+    return output;
+  }
+
+  array4D(
+    width: number,
+    height: number,
+    depth: number,
+    wLength: number
+  ): number[][][][] {
+    const output = new Array(width);
+    for (let x = 0; x < width; x++) {
+      output[x] = new Array(height);
+      for (let y = 0; y < height; y++) {
+        output[x][y] = new Array(depth);
+        for (let z = 0; z < depth; z++) {
+          output[x][y][z] = new Array(wLength);
+          for (let w = 0; w < wLength; w++) {
+            output[x][y][z][w] = this.noise4D(x, y, z, w);
+          }
+        }
+      }
+    }
+    return output;
+  }
+
   noise2D(x: number, y: number): number {
     const stretchOffset = (x + y) * STRETCH_2D;
     const [xs, ys] = [x + stretchOffset, y + stretchOffset];

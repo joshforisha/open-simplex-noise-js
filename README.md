@@ -41,6 +41,12 @@ ctx.putImageData(imageData, 0, 0);
 
 #### `constructor (seed: number)`
 
+#### `array2D (width: number, height: number) => number[][]`
+
+#### `array3D (width: number, height: number, depth: number) => number[][][]`
+
+#### `array4D (width: number, height: number, depth: number, wLength: number) => number[][][][]`
+
 #### `noise2D (x: number, y: number) => number`
 
 #### `noise3D (x: number, y: number, z: number) => number`
