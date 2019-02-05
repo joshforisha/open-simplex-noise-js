@@ -91,6 +91,11 @@ function shuffleSeed(seed: Uint32Array): Uint32Array {
   return newSeed;
 }
 
+const ff = (val: number) => {
+  const t = val >> 0;
+  return val < t ? t - 1 : t;
+};
+
 export default class OpenSimplexNoise {
   private lookup2D: Contribution2[];
   private lookup3D: Contribution3[];
@@ -173,36 +178,43 @@ export default class OpenSimplexNoise {
 
   noise2D(x: number, y: number): number {
     const stretchOffset = (x + y) * STRETCH_2D;
-    const [xs, ys] = [x + stretchOffset, y + stretchOffset];
-    const [xsb, ysb] = [Math.floor(xs), Math.floor(ys)];
+
+    const xs = x + stretchOffset;
+    const ys = y + stretchOffset;
+
+    const xsb = ff(xs);
+    const ysb = ff(ys);
+
     const squishOffset = (xsb + ysb) * SQUISH_2D;
-    const [dx0, dy0] = [x - (xsb + squishOffset), y - (ysb + squishOffset)];
-    const [xins, yins] = [xs - xsb, ys - ysb];
+
+    const dx0 = x - (xsb + squishOffset);
+    const dy0 = y - (ysb + squishOffset);
+
+    const xins = xs - xsb;
+    const yins = ys - ysb;
+
     const inSum = xins + yins;
-    const hashVals = new Uint32Array(4);
-    hashVals[0] = xins - yins + 1;
-    hashVals[1] = inSum;
-    hashVals[2] = inSum + yins;
-    hashVals[3] = inSum + xins;
-    const hash =
-      hashVals[0] |
-      (hashVals[1] << 1) |
-      (hashVals[2] << 2) |
-      (hashVals[3] << 4);
-    let c = this.lookup2D[hash];
-    let value = 0.0;
-    while (typeof c !== 'undefined') {
-      const [dx, dy] = [dx0 + c.dx, dy0 + c.dy];
+    const hash = xins - (yins + 1) | (inSum << 1) | ((inSum + yins) << 2) | inSum + xins;
+
+    let value = 0;
+
+    for (let c = this.lookup2D[hash]; c !== undefined; c = c.next) {
+      const dx = dx0 + c.dx;
+      const dy = dy0 + c.dy;
+
       let attn = 2 - dx * dx - dy * dy;
       if (attn > 0) {
-        const [px, py] = [xsb + c.xsb, ysb + c.ysb];
-        const i = this.perm2D[(this.perm[px & 0xff] + py) & 0xff];
-        const valuePart = gradients2D[i] * dx + gradients2D[i + 1] * dy;
-        attn *= attn;
-        value += attn * attn * valuePart;
+        const indexPart = this.perm[(xsb + c.xsb) & 0xff];
+        const index = this.perm2D[(indexPart + ysb + c.ysb) & 0xff];
+
+        const valuePart =
+          gradients2D[index] * dx +
+          gradients2D[index + 1] * dy;
+
+        value += attn * attn * attn * attn * valuePart;
       }
-      c = c.next;
     }
+
     return value * NORM_2D;
   }
 
