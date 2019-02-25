@@ -91,11 +91,6 @@ function shuffleSeed(seed: Uint32Array): Uint32Array {
   return newSeed;
 }
 
-const ff = (val: number) => {
-  const t = val >> 0;
-  return val < t ? t - 1 : t;
-};
-
 export default class OpenSimplexNoise {
   private lookup2D: Contribution2[];
   private lookup3D: Contribution3[];
@@ -182,8 +177,8 @@ export default class OpenSimplexNoise {
     const xs = x + stretchOffset;
     const ys = y + stretchOffset;
 
-    const xsb = ff(xs);
-    const ysb = ff(ys);
+    const xsb = Math.floor(xs);
+    const ysb = Math.floor(ys);
 
     const squishOffset = (xsb + ysb) * SQUISH_2D;
 
@@ -194,22 +189,31 @@ export default class OpenSimplexNoise {
     const yins = ys - ysb;
 
     const inSum = xins + yins;
-    const hash = xins - (yins + 1) | (inSum << 1) | ((inSum + yins) << 2) | inSum + xins;
+    const hash =
+      (xins - yins + 1) |
+      (inSum << 1) |
+      ((inSum + yins) << 2) |
+      ((inSum + xins) << 4);
 
     let value = 0;
+
+    // technicly one should check wether the hash is in range of loopup2D
+    // otherwise the whole operation is undefined the same is true for the
+    // perm lookup table
 
     for (let c = this.lookup2D[hash]; c !== undefined; c = c.next) {
       const dx = dx0 + c.dx;
       const dy = dy0 + c.dy;
 
-      let attn = 2 - dx * dx - dy * dy;
+      const attn = 2 - dx * dx - dy * dy;
       if (attn > 0) {
-        const indexPart = this.perm[(xsb + c.xsb) & 0xff];
-        const index = this.perm2D[(indexPart + ysb + c.ysb) & 0xff];
+        const px = xsb + c.xsb;
+        const py = ysb + c.ysb;
 
-        const valuePart =
-          gradients2D[index] * dx +
-          gradients2D[index + 1] * dy;
+        const indexPartA = this.perm[px & 0xff];
+        const index = this.perm2D[(indexPartA + py) & 0xff];
+
+        const valuePart = gradients2D[index] * dx + gradients2D[index + 1] * dy;
 
         value += attn * attn * attn * attn * valuePart;
       }
@@ -220,131 +224,129 @@ export default class OpenSimplexNoise {
 
   noise3D(x: number, y: number, z: number): number {
     const stretchOffset = (x + y + z) * STRETCH_3D;
-    const [xs, ys, zs] = [
-      x + stretchOffset,
-      y + stretchOffset,
-      z + stretchOffset
-    ];
-    const [xsb, ysb, zsb] = [Math.floor(xs), Math.floor(ys), Math.floor(zs)];
+
+    const xs = x + stretchOffset;
+    const ys = y + stretchOffset;
+    const zs = z + stretchOffset;
+
+    const xsb = Math.floor(xs);
+    const ysb = Math.floor(ys);
+    const zsb = Math.floor(zs);
+
     const squishOffset = (xsb + ysb + zsb) * SQUISH_3D;
-    const [dx0, dy0, dz0] = [
-      x - (xsb + squishOffset),
-      y - (ysb + squishOffset),
-      z - (zsb + squishOffset)
-    ];
-    const [xins, yins, zins] = [xs - xsb, ys - ysb, zs - zsb];
+
+    const dx0 = x - (xsb + squishOffset);
+    const dy0 = y - (ysb + squishOffset);
+    const dz0 = z - (zsb + squishOffset);
+
+    const xins = xs - xsb;
+    const yins = ys - ysb;
+    const zins = zs - zsb;
+
     const inSum = xins + yins + zins;
-    const hashVals = new Uint32Array(7);
-    hashVals[0] = yins - zins + 1;
-    hashVals[1] = xins - yins + 1;
-    hashVals[2] = xins - zins + 1;
-    hashVals[3] = inSum;
-    hashVals[4] = inSum + zins;
-    hashVals[5] = inSum + yins;
-    hashVals[6] = inSum + xins;
     const hash =
-      hashVals[0] |
-      (hashVals[1] << 1) |
-      (hashVals[2] << 2) |
-      (hashVals[3] << 3) |
-      (hashVals[4] << 5) |
-      (hashVals[5] << 7) |
-      (hashVals[6] << 9);
-    let c = this.lookup3D[hash];
-    let value = 0.0;
-    while (typeof c !== 'undefined') {
-      const [dx, dy, dz] = [dx0 + c.dx, dy0 + c.dy, dz0 + c.dz];
-      let attn = 2 - dx * dx - dy * dy - dz * dz;
+      (yins - zins + 1) |
+      ((xins - yins + 1) << 1) |
+      ((xins - zins + 1) << 2) |
+      (inSum << 3) |
+      ((inSum + zins) << 5) |
+      ((inSum + yins) << 7) |
+      ((inSum + xins) << 9);
+
+    let value = 0;
+
+    for (let c = this.lookup3D[hash]; c !== undefined; c = c.next) {
+      const dx = dx0 + c.dx;
+      const dy = dy0 + c.dy;
+      const dz = dz0 + c.dz;
+
+      const attn = 2 - dx * dx - dy * dy - dz * dz;
       if (attn > 0) {
-        const [px, py, pz] = [xsb + c.xsb, ysb + c.ysb, zsb + c.zsb];
-        const i = this.perm3D[
-          (this.perm[(this.perm[px & 0xff] + py) & 0xff] + pz) & 0xff
-        ];
+        const px = xsb + c.xsb;
+        const py = ysb + c.ysb;
+        const pz = zsb + c.zsb;
+
+        const indexPartA = this.perm[px & 0xff];
+        const indexPartB = this.perm[(indexPartA + py) & 0xff];
+        const index = this.perm3D[(indexPartB + pz) & 0xff];
+
         const valuePart =
-          gradients3D[i] * dx +
-          gradients3D[i + 1] * dy +
-          gradients3D[i + 2] * dz;
-        attn *= attn;
-        value += attn * attn * valuePart;
+          gradients3D[index] * dx +
+          gradients3D[index + 1] * dy +
+          gradients3D[index + 2] * dz;
+
+        value += attn * attn * attn * attn * valuePart;
       }
-      c = c.next;
     }
     return value * NORM_3D;
   }
 
   noise4D(x: number, y: number, z: number, w: number): number {
     const stretchOffset = (x + y + z + w) * STRETCH_4D;
-    const [xs, ys, zs, ws] = [
-      x + stretchOffset,
-      y + stretchOffset,
-      z + stretchOffset,
-      w + stretchOffset
-    ];
-    const [xsb, ysb, zsb, wsb] = [
-      Math.floor(xs),
-      Math.floor(ys),
-      Math.floor(zs),
-      Math.floor(ws)
-    ];
+
+    const xs = x + stretchOffset;
+    const ys = y + stretchOffset;
+    const zs = z + stretchOffset;
+    const ws = w + stretchOffset;
+
+    const xsb = Math.floor(xs);
+    const ysb = Math.floor(ys);
+    const zsb = Math.floor(zs);
+    const wsb = Math.floor(ws);
+
     const squishOffset = (xsb + ysb + zsb + wsb) * SQUISH_4D;
     const dx0 = x - (xsb + squishOffset);
     const dy0 = y - (ysb + squishOffset);
     const dz0 = z - (zsb + squishOffset);
     const dw0 = w - (wsb + squishOffset);
-    const [xins, yins, zins, wins] = [xs - xsb, ys - ysb, zs - zsb, ws - wsb];
+
+    const xins = xs - xsb;
+    const yins = ys - ysb;
+    const zins = zs - zsb;
+    const wins = ws - wsb;
+
     const inSum = xins + yins + zins + wins;
-    const hashVals = new Uint32Array(11);
-    hashVals[0] = zins - wins + 1;
-    hashVals[1] = yins - zins + 1;
-    hashVals[2] = yins - wins + 1;
-    hashVals[3] = xins - yins + 1;
-    hashVals[4] = xins - zins + 1;
-    hashVals[5] = xins - wins + 1;
-    hashVals[6] = inSum;
-    hashVals[7] = inSum + wins;
-    hashVals[8] = inSum + zins;
-    hashVals[9] = inSum + yins;
-    hashVals[10] = inSum + xins;
     const hash =
-      hashVals[0] |
-      (hashVals[1] << 1) |
-      (hashVals[2] << 2) |
-      (hashVals[3] << 3) |
-      (hashVals[4] << 4) |
-      (hashVals[5] << 5) |
-      (hashVals[6] << 6) |
-      (hashVals[7] << 8) |
-      (hashVals[8] << 11) |
-      (hashVals[9] << 14) |
-      (hashVals[10] << 17);
-    let c = this.lookup4D[hash];
-    let value = 0.0;
-    while (typeof c !== 'undefined') {
-      const [dx, dy, dz, dw] = [dx0 + c.dx, dy0 + c.dy, dz0 + c.dz, dw0 + c.dw];
-      let attn = 2 - dx * dx - dy * dy - dz * dz - dw * dw;
+      (zins - wins + 1) |
+      ((yins - zins + 1) << 1) |
+      ((yins - wins + 1) << 2) |
+      ((xins - yins + 1) << 3) |
+      ((xins - zins + 1) << 4) |
+      ((xins - wins + 1) << 5) |
+      (inSum << 6) |
+      ((inSum + wins) << 8) |
+      ((inSum + zins) << 11) |
+      ((inSum + yins) << 14) |
+      ((inSum + xins) << 17);
+
+    let value = 0;
+
+    for (let c = this.lookup4D[hash]; c !== undefined; c = c.next) {
+      const dx = dx0 + c.dx;
+      const dy = dy0 + c.dy;
+      const dz = dz0 + c.dz;
+      const dw = dw0 + c.dw;
+
+      const attn = 2 - dx * dx - dy * dy - dz * dz - dw * dw;
       if (attn > 0) {
-        const [px, py, pz, pw] = [
-          xsb + c.xsb,
-          ysb + c.ysb,
-          zsb + c.zsb,
-          wsb + c.wsb
-        ];
-        const i = this.perm4D[
-          (this.perm[
-            (this.perm[(this.perm[px & 0xff] + py) & 0xff] + pz) & 0xff
-          ] +
-            pw) &
-            0xff
-        ];
+        const px = xsb + c.xsb;
+        const py = ysb + c.ysb;
+        const pz = zsb + c.zsb;
+        const pw = wsb + c.wsb;
+
+        const indexPartA = this.perm[px & 0xff];
+        const indexPartB = this.perm[(indexPartA + py) & 0xff];
+        const indexPartC = this.perm[(indexPartB + pz) & 0xff];
+        const index = this.perm4D[(indexPartC + pw) & 0xff];
+
         const valuePart =
-          gradients4D[i] * dx +
-          gradients4D[i + 1] * dy +
-          gradients4D[i + 2] * dz +
-          gradients4D[i + 3] * dw;
-        attn *= attn;
-        value += attn * attn * valuePart;
+          gradients4D[index] * dx +
+          gradients4D[index + 1] * dy +
+          gradients4D[index + 2] * dz +
+          gradients4D[index + 3] * dw;
+
+        value += attn * attn * attn * attn * valuePart;
       }
-      c = c.next;
     }
     return value * NORM_4D;
   }
