@@ -197,10 +197,6 @@ export default class OpenSimplexNoise {
 
     let value = 0;
 
-    // technicly one should check wether the hash is in range of loopup2D
-    // otherwise the whole operation is undefined the same is true for the
-    // perm lookup table
-
     for (let c = this.lookup2D[hash]; c !== undefined; c = c.next) {
       const dx = dx0 + c.dx;
       const dy = dy0 + c.dy;
