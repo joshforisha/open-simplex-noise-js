@@ -1,6 +1,8 @@
 {
   "name": "open-simplex-noise",
   "version": "1.6.0",
+  "main": "dist/OpenSimplexNoise.js",
+  "module": "dist/OpenSimplexNoise.esm.js",
   "description": "OpenSimplex noise for TypeScript/JavaScript",
   "keywords": [
     "noise",
@@ -24,15 +26,18 @@
   "contributors": [
     "Florian Völker <Neirolf2030@web.de>"
   ],
-  "main": "lib/index",
   "types": "lib/index.d.ts",
   "scripts": {
     "compile": "tsc",
+    "build": "rollup -c",
     "format": "prettier --parser typescript --single-quote --write src/*.ts",
     "watch": "tsc --watch"
   },
   "devDependencies": {
     "prettier": "^1.16.4",
+    "rollup": "^1.6.0",
+    "rollup-plugin-typescript": "^1.0.0",
+    "tslib": "^1.9.3",
     "typescript": "^3.3.3333"
   }
 }
