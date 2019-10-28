@@ -12,11 +12,11 @@ TypeScript/JavaScript implementation of [OpenSimplex noise](https://en.wikipedia
 ## Example
 
 ```javascript
-import OpenSimplexNoise from 'open-simplex-noise';
+import OpenSimplexNoise from "open-simplex-noise";
 
 const [width, height] = [888, 222];
-const canvas = document.querySelector('canvas');
-const ctx = canvas.getContext('2d');
+const canvas = document.querySelector("canvas");
+const ctx = canvas.getContext("2d");
 const imageData = ctx.createImageData(width, height);
 const openSimplex = new OpenSimplexNoise(Date.now());
 

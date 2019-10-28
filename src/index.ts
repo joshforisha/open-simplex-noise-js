@@ -20,16 +20,16 @@ import {
   p2D,
   p3D,
   p4D
-} from './constants';
+} from "./constants";
 
 class Contribution2 {
-  dx: number;
-  dy: number;
-  next: Contribution2;
-  xsb: number;
-  ysb: number;
+  public dx: number;
+  public dy: number;
+  public next: Contribution2;
+  public xsb: number;
+  public ysb: number;
 
-  constructor(multiplier: number, xsb: number, ysb: number) {
+  public constructor(multiplier: number, xsb: number, ysb: number) {
     this.dx = -xsb - multiplier * SQUISH_2D;
     this.dy = -ysb - multiplier * SQUISH_2D;
     this.xsb = xsb;
@@ -38,15 +38,15 @@ class Contribution2 {
 }
 
 class Contribution3 {
-  dx: number;
-  dy: number;
-  dz: number;
-  next: Contribution3;
-  xsb: number;
-  ysb: number;
-  zsb: number;
+  public dx: number;
+  public dy: number;
+  public dz: number;
+  public next: Contribution3;
+  public xsb: number;
+  public ysb: number;
+  public zsb: number;
 
-  constructor(multiplier: number, xsb: number, ysb: number, zsb: number) {
+  public constructor(multiplier: number, xsb: number, ysb: number, zsb: number) {
     this.dx = -xsb - multiplier * SQUISH_3D;
     this.dy = -ysb - multiplier * SQUISH_3D;
     this.dz = -zsb - multiplier * SQUISH_3D;
@@ -57,17 +57,17 @@ class Contribution3 {
 }
 
 class Contribution4 {
-  dw: number;
-  dx: number;
-  dy: number;
-  dz: number;
-  next: Contribution4;
-  wsb: number;
-  xsb: number;
-  ysb: number;
-  zsb: number;
+  public dw: number;
+  public dx: number;
+  public dy: number;
+  public dz: number;
+  public next: Contribution4;
+  public wsb: number;
+  public xsb: number;
+  public ysb: number;
+  public zsb: number;
 
-  constructor(
+  public constructor(
     multiplier: number,
     xsb: number,
     ysb: number,
@@ -100,7 +100,7 @@ export default class OpenSimplexNoise {
   private perm3D: Uint8Array;
   private perm4D: Uint8Array;
 
-  constructor(clientSeed: number) {
+  public constructor(clientSeed: number) {
     this.initialize();
     this.perm = new Uint8Array(256);
     this.perm2D = new Uint8Array(256);
@@ -124,7 +124,7 @@ export default class OpenSimplexNoise {
     }
   }
 
-  array2D(width: number, height: number): number[][] {
+  public array2D(width: number, height: number): number[][] {
     const output = new Array(width);
     for (let x = 0; x < width; x++) {
       output[x] = new Array(height);
@@ -135,7 +135,7 @@ export default class OpenSimplexNoise {
     return output;
   }
 
-  array3D(width: number, height: number, depth: number): number[][][] {
+  public array3D(width: number, height: number, depth: number): number[][][] {
     const output = new Array(width);
     for (let x = 0; x < width; x++) {
       output[x] = new Array(height);
@@ -149,7 +149,7 @@ export default class OpenSimplexNoise {
     return output;
   }
 
-  array4D(
+  public array4D(
     width: number,
     height: number,
     depth: number,
@@ -171,7 +171,7 @@ export default class OpenSimplexNoise {
     return output;
   }
 
-  noise2D(x: number, y: number): number {
+  public noise2D(x: number, y: number): number {
     const stretchOffset = (x + y) * STRETCH_2D;
 
     const xs = x + stretchOffset;
@@ -218,7 +218,7 @@ export default class OpenSimplexNoise {
     return value * NORM_2D;
   }
 
-  noise3D(x: number, y: number, z: number): number {
+  public noise3D(x: number, y: number, z: number): number {
     const stretchOffset = (x + y + z) * STRETCH_3D;
 
     const xs = x + stretchOffset;
@@ -277,7 +277,7 @@ export default class OpenSimplexNoise {
     return value * NORM_3D;
   }
 
-  noise4D(x: number, y: number, z: number, w: number): number {
+  public noise4D(x: number, y: number, z: number, w: number): number {
     const stretchOffset = (x + y + z + w) * STRETCH_4D;
 
     const xs = x + stretchOffset;
@@ -347,7 +347,7 @@ export default class OpenSimplexNoise {
     return value * NORM_4D;
   }
 
-  private initialize() {
+  private initialize(): void {
     const contributions2D: Contribution2[] = [];
     for (let i = 0; i < p2D.length; i += 4) {
       const baseSet = base2D[p2D[i]];
