@@ -4,6 +4,12 @@ This library uses [Compatible Versioning](https://github.com/staltz/comver#readm
 
 ## [Unreleased]
 
+## [v1.7]
+
+### Changed
+- Updated dev dependencies' versions
+- Use default Prettier config for syntax
+
 ## [v1.6]
 
 ### Changed
@@ -25,7 +31,8 @@ This library uses [Compatible Versioning](https://github.com/staltz/comver#readm
 ### Added
 - Define `noise2D`, `noise3D`, and `noise4D` functions.
 
-[Unreleased]: https://github.com/joshforisha/open-simplex-noise-js/compare/v1.6...HEAD
+[Unreleased]: https://github.com/joshforisha/open-simplex-noise-js/compare/v1.7...HEAD
+[v1.7]: https://github.com/joshforisha/open-simplex-noise-js/compare/v1.6...v1.7
 [v1.6]: https://github.com/joshforisha/open-simplex-noise-js/compare/v1.5...v1.6
 [v1.5]: https://github.com/joshforisha/open-simplex-noise-js/compare/v1.4...v1.5
 [v1.4]: https://github.com/joshforisha/open-simplex-noise-js/compare/v1.0...v1.4
