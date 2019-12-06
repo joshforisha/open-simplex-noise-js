@@ -1,6 +1,6 @@
 {
   "name": "open-simplex-noise",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "OpenSimplex noise for TypeScript/JavaScript",
   "keywords": [
     "noise",
@@ -24,7 +24,7 @@
   "contributors": [
     "Florian Völker <Neirolf2030@web.de>"
   ],
-  "main": "lib/index.ts",
+  "main": "lib/index.js",
   "types": "lib/index.d.ts",
   "scripts": {
     "compile": "tsc",
