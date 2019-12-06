@@ -3,7 +3,7 @@
 [![build](https://img.shields.io/travis/joshforisha/open-simplex-noise-js.svg)](https://travis-ci.org/joshforisha/open-simplex-noise-js)
 [![npm](https://img.shields.io/npm/v/open-simplex-noise.svg)](https://www.npmjs.com/package/open-simplex-noise)
 
-TypeScript/JavaScript implementation of [OpenSimplex noise](https://en.wikipedia.org/wiki/OpenSimplex_noise)
+TypeScript implementation of [OpenSimplex noise](https://en.wikipedia.org/wiki/OpenSimplex_noise)
 
 ## Install
 
@@ -12,18 +12,18 @@ TypeScript/JavaScript implementation of [OpenSimplex noise](https://en.wikipedia
 ## Example
 
 ```javascript
-import OpenSimplexNoise from "open-simplex-noise";
+import { makeNoise2D } from "open-simplex-noise";
 
 const [width, height] = [888, 222];
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 const imageData = ctx.createImageData(width, height);
-const openSimplex = new OpenSimplexNoise(Date.now());
+const noise2D = makeNoise2D(Date.now());
 
 for (let x = 0; x < width; x++) {
   for (let y = 0; y < height; y++) {
     const i = (x + y * width) * 4;
-    const value = (openSimplex.noise2D(x, y) + 1) * 128;
+    const value = (noise2D(x, y) + 1) * 128;
     imageData.data[i] = value;
     imageData.data[i + 1] = value;
     imageData.data[i + 2] = value;
@@ -37,18 +37,20 @@ ctx.putImageData(imageData, 0, 0);
 
 ## API
 
-### `class OpenSimplexNoise`
+```typescript
+type Noise2D = (x: number, y: number) => number
+type Noise3D = (x: number, y: number, z: number) => number
+type Noise4D = (x: number, y: number, z: number, w: number) => number
+```
 
-#### `constructor (seed: number)`
+#### `makeNoise2D (seed: number) => Noise2D`
 
-#### `array2D (width: number, height: number) => number[][]`
+Initializes and returns a function to generate 2D noise.
 
-#### `array3D (width: number, height: number, depth: number) => number[][][]`
+#### `makeNoise3D (seed: number) => Noise3D`
 
-#### `array4D (width: number, height: number, depth: number, wLength: number) => number[][][][]`
+Initializes and returns a function to generate 3D noise.
 
-#### `noise2D (x: number, y: number) => number`
+#### `makeNoise4D (seed: number) => Noise4D`
 
-#### `noise3D (x: number, y: number, z: number) => number`
-
-#### `noise4D (x: number, y: number, z: number, w: number) => number`
+Initializes and returns a function to generate 4D noise.
