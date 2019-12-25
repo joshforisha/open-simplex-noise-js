@@ -22,11 +22,11 @@ import {
   p4D
 } from "./constants";
 
-type Noise2D = (x: number, y: number) => number;
+export type Noise2D = (x: number, y: number) => number;
 
-type Noise3D = (x: number, y: number, z: number) => number;
+export type Noise3D = (x: number, y: number, z: number) => number;
 
-type Noise4D = (x: number, y: number, z: number, w: number) => number;
+export type Noise4D = (x: number, y: number, z: number, w: number) => number;
 
 interface Contribution2D {
   dx: number;
