@@ -1,6 +1,6 @@
 {
   "name": "open-simplex-noise",
-  "version": "2.2.0",
+  "version": "2.3.0",
   "description": "OpenSimplex noise for TypeScript/JavaScript",
   "keywords": [
     "noise",
@@ -32,7 +32,7 @@
     "watch": "tsc --watch"
   },
   "devDependencies": {
-    "prettier": "^1.19.1",
-    "typescript": "^3.7.3"
+    "prettier": "^2.0.4",
+    "typescript": "^3.8.3"
   }
 }
