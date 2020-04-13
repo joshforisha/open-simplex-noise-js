@@ -19,7 +19,7 @@
     "url": "https://github.com/joshforisha/open-simplex-noise-js/issues"
   },
   "files": [
-    "lib"
+    "src"
   ],
   "contributors": [
     "Florian Völker <Neirolf2030@web.de>"
