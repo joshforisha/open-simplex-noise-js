@@ -19,8 +19,7 @@
     "url": "https://github.com/joshforisha/open-simplex-noise-js/issues"
   },
   "files": [
-    "lib",
-    "src"
+    "lib"
   ],
   "contributors": [
     "Florian Völker <Neirolf2030@web.de>"
@@ -30,10 +29,16 @@
   "scripts": {
     "compile": "tsc",
     "format": "prettier --parser typescript --write src/*.ts",
+    "test": "eslint src/index.ts",
     "watch": "tsc --watch"
   },
   "devDependencies": {
-    "prettier": "^2.0.4",
-    "typescript": "^3.8.3"
+    "@typescript-eslint/eslint-plugin": "^3.6.1",
+    "@typescript-eslint/parser": "^3.6.1",
+    "eslint": "^7.4.0",
+    "eslint-config-prettier": "^6.11.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "prettier": "^2.0.5",
+    "typescript": "^3.9.6"
   }
 }
