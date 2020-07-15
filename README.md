@@ -32,7 +32,7 @@ for (let x = 0; x < width; x++) {
 ctx.putImageData(imageData, 0, 0);
 ```
 
-![Example output](https://github.com/joshforisha/open-simplex-noise-js/blob/master/images/example.png?raw=true)
+![Example output](https://raw.githubusercontent.com/joshforisha/open-simplex-noise-js/main/images/example.png)
 
 ## API
 
