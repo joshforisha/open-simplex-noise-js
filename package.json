@@ -29,7 +29,7 @@
   "scripts": {
     "compile": "tsc",
     "format": "prettier --parser typescript --write src/*.ts",
-    "test": "eslint src/index.ts",
+    "test": "eslint src/index.ts && tsc --noEmit",
     "watch": "tsc --watch"
   },
   "devDependencies": {
