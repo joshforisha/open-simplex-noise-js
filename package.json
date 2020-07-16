@@ -1,6 +1,6 @@
 {
   "name": "open-simplex-noise",
-  "version": "2.3.1",
+  "version": "2.4.0-pre1",
   "description": "OpenSimplex noise for TypeScript/JavaScript",
   "keywords": [
     "noise",
@@ -18,9 +18,6 @@
   "bugs": {
     "url": "https://github.com/joshforisha/open-simplex-noise-js/issues"
   },
-  "files": [
-    "lib"
-  ],
   "contributors": [
     "Florian Völker <Neirolf2030@web.de>"
   ],
