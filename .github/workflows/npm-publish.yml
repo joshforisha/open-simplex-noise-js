@@ -13,7 +13,7 @@ jobs:
         with:
           node-version: 12
       - run: npm ci
-      - run: npm compile
+      - run: npm run compile
 
   publish-npm:
     needs: compile
