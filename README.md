@@ -34,6 +34,12 @@ ctx.putImageData(imageData, 0, 0);
 
 ![Example output](https://raw.githubusercontent.com/joshforisha/open-simplex-noise-js/main/images/example.png)
 
+## Fractal Noise
+
+For _fractal noise_ results, which typically involves scaling frequencies and stacking octaves, see [joshforisha/fractal-noise-js](https://github.com/joshforisha/fractal-noise-js). The functions there can be used with this library's noise algorithm to obtain varied results like the following:
+
+![Example fractal noise output](https://raw.githubusercontent.com/joshforisha/fractal-noise-js/main/images/rectangle-low-8.png)
+
 ## API
 
 ```typescript
