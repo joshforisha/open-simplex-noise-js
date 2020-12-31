@@ -17,7 +17,7 @@ const [width, height] = [888, 222];
 const canvas = document.querySelector("canvas");
 const ctx = canvas.getContext("2d");
 const imageData = ctx.createImageData(width, height);
-const noise2D = makeNoise2D(Date.now());
+const noise2D = makeNoise2D(Date.now()); // Using current date as seed
 
 for (let x = 0; x < width; x++) {
   for (let y = 0; y < height; y++) {
