@@ -11,5 +11,6 @@
     "outDir": "lib",
     "rootDir": "src",
     "target": "ES5"
-  }
+  },
+  "exclude": ["**/*_test.ts"]
 }
