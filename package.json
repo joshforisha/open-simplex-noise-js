@@ -28,11 +28,12 @@
   "module": "lib/main.mod.js",
   "types": "lib/main.d.ts",
   "scripts": {
-    "compile": "tsc",
+    "compile": "tsc && denoify",
     "test": "tsc --noEmit",
     "watch": "tsc --watch"
   },
   "devDependencies": {
-    "typescript": "^4.2.4"
+    "typescript": "^4.2.4",
+    "denoify": "^0.6.5"
   }
 }
