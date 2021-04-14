@@ -1,12 +1,9 @@
 # OpenSimplex Noise
 
-[![npm](https://img.shields.io/npm/v/open-simplex-noise.svg)](https://www.npmjs.com/package/open-simplex-noise)
+TypeScript implementation of [OpenSimplex noise](https://en.wikipedia.org/wiki/OpenSimplex_noise).
 
-TypeScript implementation of [OpenSimplex noise](https://en.wikipedia.org/wiki/OpenSimplex_noise)
-
-## Install
-
-    npm install open-simplex-noise
+* Deno module: [https://deno.land/x/open_simplex_noise](https://deno.land/x/open_simplex_noise)
+* NPM package: [open-simplex-noise](https://www.npmjs.com/package/open-simplex-noise)
 
 ## Example
 
@@ -36,7 +33,7 @@ ctx.putImageData(imageData, 0, 0);
 
 ## Fractal Noise
 
-For _fractal noise_ results, which typically involves scaling frequencies and stacking octaves, see [joshforisha/fractal-noise-js](https://github.com/joshforisha/fractal-noise-js). The functions there can be used with this library's noise algorithm to obtain varied results like the following:
+For _fractal noise_ results, which typically involves scaling frequencies and stacking octaves, see [joshforisha/fractal-noise-js](https://github.com/joshforisha/fractal-noise-js) (NPM: [fractal-noise](https://www.npmjs.com/package/fractal-noise)). The functions there can be used with this library's noise algorithm to obtain varied results like the following:
 
 ![Example fractal noise output](https://raw.githubusercontent.com/joshforisha/fractal-noise-js/main/images/rectangle-low-8.png)
 
