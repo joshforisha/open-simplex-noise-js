@@ -1,6 +1,6 @@
 // This is free and unencumbered software released into the public domain
 
-import shuffleSeed from "./shuffle_seed";
+import shuffleSeed from "./shuffle_seed.ts";
 
 const NORM_3D = 1.0 / 103.0;
 const SQUISH_3D = (Math.sqrt(3 + 1) - 1) / 3;

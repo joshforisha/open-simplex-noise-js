@@ -29,11 +29,11 @@
   "types": "lib/main.d.ts",
   "scripts": {
     "compile": "tsc && denoify",
-    "test": "tsc --noEmit",
+    "test": "tsc --noEmit && deno test deno_lib",
     "watch": "tsc --watch"
   },
   "devDependencies": {
-    "typescript": "^4.2.4",
-    "denoify": "^0.6.5"
+    "denoify": "^0.6.5",
+    "typescript": "^4.2.4"
   }
 }

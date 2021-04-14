@@ -12,5 +12,6 @@
     "rootDir": "src",
     "target": "ES5"
   },
-  "exclude": ["**/*_test.ts"]
+  "exclude": ["**/*_test.ts"],
+  "include": ["src/*.ts"]
 }
