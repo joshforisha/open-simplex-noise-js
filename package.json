@@ -24,9 +24,8 @@
   "files": [
     "lib/"
   ],
-  "main": "lib/main.js",
-  "module": "lib/main.mod.js",
-  "types": "lib/main.d.ts",
+  "main": "lib/mod.js",
+  "types": "lib/mod.d.ts",
   "scripts": {
     "compile": "tsc && denoify",
     "test": "tsc --noEmit && deno test deno_lib",
