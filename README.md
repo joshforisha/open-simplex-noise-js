@@ -9,7 +9,7 @@ TypeScript implementation of [OpenSimplex noise](https://en.wikipedia.org/wiki/O
 
 ```javascript
 import { makeNoise2D } from "open-simplex-noise";
-// import { makeNoise2D } from "https://deno.land/x/open-simplex-noise/mod.ts"
+// import { makeNoise2D } from "https://deno.land/x/open_simplex_noise/mod.ts"
 
 const [width, height] = [888, 222];
 const canvas = document.querySelector("canvas");
