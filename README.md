@@ -40,6 +40,8 @@ For _fractal noise_ results, which typically involves scaling frequencies and st
 
 ## API
 
+Each noise function returns a float between -1 and 1, exclusive: `(-1.0, 1.0)`.
+
 ```typescript
 type Noise2D = (x: number, y: number) => number
 type Noise3D = (x: number, y: number, z: number) => number
